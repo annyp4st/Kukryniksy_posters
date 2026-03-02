@@ -1,0 +1,739 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Виртуальная выставка: плакаты Кукрыниксов 1941–1945</title>
+  <style>
+    /* -----------------------------------------------
+       Военная тематика: стиль плакатов 1940-х годов
+       Цвета: красный (победа, знамя), охра (старая бумага),
+              тёмно-серый (свинец), бежевый.
+    ----------------------------------------------- */
+    @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;600&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #4a2c1a;  /* тёмный фон под дерево / землю */
+      font-family: 'PT Serif', 'Times New Roman', serif;
+      color: #2e1e0e;
+      line-height: 1.5;
+      padding: 30px 20px;
+      background-image: 
+        linear-gradient(rgba(100, 60, 30, 0.3) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(100, 60, 30, 0.3) 1px, transparent 1px);
+      background-size: 40px 40px;
+      position: relative;
+    }
+
+    /* наложение текстуры старой бумаги */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><filter id="noise" x="0%" y="0%" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="1" stitchTiles="stitch"/><feColorMatrix type="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.15 0"/></filter><rect width="100" height="100" filter="url(%23noise)" opacity="0.15"/></svg>');
+      opacity: 0.25;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      background-color: #f2e5d0;  /* цвет старой бумаги */
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      border: 1px solid #b68b6e;
+      padding: 2rem 2.5rem;
+      position: relative;
+      z-index: 1;
+      border-radius: 4px;
+    }
+
+    /* декоративные уголки / рамка в стиле военных плакатов */
+    .container::before,
+    .container::after {
+      content: "";
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      border-color: #9e2b2b;
+      border-style: solid;
+      pointer-events: none;
+    }
+    .container::before {
+      top: 15px;
+      left: 15px;
+      border-top-width: 4px;
+      border-left-width: 4px;
+    }
+    .container::after {
+      bottom: 15px;
+      right: 15px;
+      border-bottom-width: 4px;
+      border-right-width: 4px;
+    }
+
+    .header {
+      margin-bottom: 2.5rem;
+      border-bottom: 3px solid #9e2b2b;
+      padding-bottom: 1.2rem;
+      position: relative;
+    }
+    .header h1 {
+      font-family: 'Oswald', sans-serif;
+      font-size: 2.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: #2e1e0e;
+      text-shadow: 2px 2px 0 #b68b6e;
+      letter-spacing: 2px;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+    .header h1::after {
+      content: "★ ★ ★";
+      display: block;
+      font-size: 1.2rem;
+      color: #9e2b2b;
+      letter-spacing: 8px;
+      margin-top: 0.25rem;
+    }
+
+    .sub {
+      font-size: 1.15rem;
+      color: #3d2b16;
+      background: rgba(255, 235, 200, 0.5);
+      padding: 0.8rem 1.2rem;
+      border-left: 6px solid #9e2b2b;
+      font-style: italic;
+    }
+
+    /* карточки фильтров и экспозиции */
+    .card {
+      background: #fcf6e7;
+      border: 2px solid #b68b6e;
+      box-shadow: inset 0 1px 4px rgba(255,255,240,0.8), 0 4px 10px rgba(0,0,0,0.2);
+      padding: 1.8rem 2.2rem;
+      margin-bottom: 2.5rem;
+      position: relative;
+    }
+
+    /* красная полоса сверху, как на плакатах */
+    .card::before {
+      content: "";
+      position: absolute;
+      top: -2px;
+      left: 10%;
+      width: 80%;
+      height: 4px;
+      background: #9e2b2b;
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .label {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: #4a2c1a;
+      min-width: 70px;
+      font-size: 1rem;
+      letter-spacing: 0.5px;
+    }
+
+    .input, select {
+      background: #fcf6e7;
+      border: 2px solid #9e5e3a;
+      padding: 0.7rem 1.2rem;
+      font-size: 1rem;
+      font-family: 'PT Serif', serif;
+      border-radius: 0;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+      transition: 0.15s;
+      flex: 1 1 250px;
+    }
+    .input:focus, select:focus {
+      outline: none;
+      border-color: #9e2b2b;
+      background: #fff9eb;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      margin: 1.5rem 0;
+    }
+
+    .filter-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      font-family: 'Oswald', sans-serif;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      color: #4a2c1a;
+      cursor: pointer;
+    }
+    .filter-checkbox input {
+      width: 20px;
+      height: 20px;
+      accent-color: #9e2b2b;
+    }
+
+    .btn {
+      background: transparent;
+      border: 3px solid #2e1e0e;
+      padding: 0.7rem 2rem;
+      font-family: 'Oswald', sans-serif;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 1rem;
+      letter-spacing: 0.5px;
+      color: #2e1e0e;
+      cursor: pointer;
+      transition: 0.1s;
+      background-color: #fcf6e7;
+      box-shadow: 4px 4px 0 #2e1e0e;
+    }
+    .btn:hover {
+      background-color: #9e2b2b;
+      border-color: #9e2b2b;
+      color: white;
+      box-shadow: 4px 4px 0 #4a2c1a;
+    }
+    .btnGhost {
+      background: #fcf6e7;
+      border-color: #9e5e3a;
+      color: #2e1e0e;
+      box-shadow: 3px 3px 0 #9e5e3a;
+    }
+    .btnGhost:hover {
+      background: #9e2b2b;
+      border-color: #9e2b2b;
+      color: white;
+      box-shadow: 3px 3px 0 #4a2c1a;
+    }
+    .btnDanger {
+      border-color: #9e2b2b;
+      color: #9e2b2b;
+      box-shadow: 2px 2px 0 #9e2b2b;
+    }
+    .btnDanger:hover {
+      background: #9e2b2b;
+      color: white;
+      box-shadow: 2px 2px 0 #4a2c1a;
+    }
+    .btnSmall {
+      padding: 0.4rem 1.2rem;
+      font-size: 0.9rem;
+    }
+
+    .small {
+      font-size: 0.95rem;
+      color: #5e4b35;
+      font-style: italic;
+      background: rgba(158, 43, 43, 0.1);
+      padding: 0.3rem 0.8rem;
+      display: inline-block;
+    }
+
+    /* сетка плакатов */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0 1rem;
+    }
+
+    .item {
+      background: #fff9eb;
+      border: 2px solid #9e5e3a;
+      box-shadow: 5px 5px 0 rgba(78, 42, 18, 0.3);
+      transition: 0.15s;
+      display: flex;
+      flex-direction: column;
+    }
+    .item:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 8px 8px 0 rgba(158, 43, 43, 0.5);
+      border-color: #9e2b2b;
+    }
+
+    .imgWrap {
+      aspect-ratio: 2/3;
+      background: #cab89e;
+      border-bottom: 3px solid #9e2b2b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .imgWrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .meta {
+      padding: 1rem 1.2rem 1.2rem;
+      flex: 1;
+      background: linear-gradient(to bottom, #fff9eb, #f2e5d0);
+    }
+    .title {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 600;
+      font-size: 1.15rem;
+      line-height: 1.3;
+      text-transform: uppercase;
+      color: #2e1e0e;
+      margin-bottom: 0.4rem;
+      border-left: 4px solid #9e2b2b;
+      padding-left: 0.7rem;
+    }
+    .author {
+      font-size: 0.9rem;
+      color: #6b4f33;
+      font-style: italic;
+      margin-bottom: 0.5rem;
+    }
+    .museum {
+      font-size: 0.8rem;
+      background: #4a2c1a;
+      color: #f2e5d0;
+      padding: 0.2rem 0.6rem;
+      display: inline-block;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* кнопка "Показать ещё" */
+    #showMoreBtn {
+      margin: 0.5rem auto 0;
+      display: block;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px dashed #b68b6e;
+      color: #6b4f33;
+      font-size: 0.9rem;
+    }
+
+    /* звёздочки и декор */
+    .footer::before {
+      content: "✧ ✧ ✧";
+      letter-spacing: 6px;
+      color: #9e2b2b;
+      font-size: 1rem;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <header class="header">
+      <h1>Виртуальная выставка: плакаты Кукрыниксов 1941–1945</h1>
+      <p class="sub">
+        Каждый плакат — живой отклик военного времени. Номера в списке соответствуют именам файлов (0.jpg, 1.jpg … 59.jpg).  
+        Для добавления своих изображений используйте кнопку «Добавить плакат».
+      </p>
+    </header>
+
+    <section class="card controls">
+      <div class="row">
+        <label class="label" for="yearSelect">Год:</label>
+        <select id="yearSelect" class="input">
+          <option value="all">Все годы</option>
+          <option value="1941">1941</option>
+          <option value="1942">1942</option>
+          <option value="1943">1943</option>
+          <option value="1944">1944</option>
+          <option value="1945">1945</option>
+        </select>
+      </div>
+      <div class="row">
+        <label class="label" for="q">Поиск:</label>
+        <input id="q" class="input" type="text" placeholder="Название, автор, год…">
+      </div>
+      <div class="filters">
+        <label class="filter-checkbox">
+          <input type="checkbox" id="tula-museum-filter">
+          <span>Плакаты в музеях Тулы</span>
+        </label>
+      </div>
+      <div class="row">
+        <button id="resetBtn" class="btn btnGhost">Сбросить</button>
+        <button id="addPosterBtn" class="btn btnGhost">Добавить плакат</button>
+      </div>
+      <div class="small" id="counter"></div>
+    </section>
+
+    <section class="card">
+      <div class="row" style="justify-content: space-between; align-items: baseline">
+        <h2 style="margin: 0; font-family: 'Oswald', sans-serif; font-size: 1.6rem; color: #2e1e0e;">Экспозиция</h2>
+      </div>
+      <div id="grid" class="grid" aria-live="polite"></div>
+      <div class="row" style="justify-content: center; margin-top: 12px">
+        <button id="showMoreBtn" class="btn btnGhost">Показать ещё</button>
+      </div>
+    </section>
+
+    <footer class="footer">
+      Ⓒ По мотивам плакатов Кукрыниксов. Файлы изображений должны лежать в папках assets/posters_by_year/ и assets/posters_by_year_small/
+    </footer>
+  </main>
+
+  <script>
+    // ------------------------------------------------------------------
+    // ДАННЫЕ ВЫСТАВКИ – ВАШ СПИСОК (номер = имя jpg)
+    // ------------------------------------------------------------------
+    window.EXHIBIT_DATA = [
+      {
+        year: 1941,
+        items: [
+          { title: "Болтуны!", author: "Кукрыниксы", file: "0.jpg" },
+          { title: "Беспощадно разгромим и уничтожим врага!", author: "Кукрыниксы", file: "1.jpg", museum: "Музей Обороны Тулы, Музей Порфирия Никитича Крылова" },
+          { title: "Бьемся мы здорово, колем отчаянно — внуки Суворова, дети Чапаева", author: "Кукрыниксы", file: "2.jpg" },
+          { title: "Наполеон потерпел поражение. То же будет и с зазнавшимся Гитлером", author: "Кукрыниксы", file: "3.jpg" },
+          { title: "Били мы врага копьем, БИЛИ МЫ ВРАГА КОПЬЕМ,БИЛИ МЫ ВРАГА РУЖЬЕМ,И ТЕПЕРЬ СТАЛЬНЫМ ОРУЖЬЕМ БЬЕМ ВРАГА, ГДЕ ОБНАРУЖИМ!", author: "Кукрыниксы", file: "4.jpg" },
+          { title: "Уборка урожая - грозный удар по врагу!", author: "Кукрыниксы", file: "5.jpg" },
+          { title: "Долг платежом красен", author: "Кукрыниксы", file: "6.jpg" },
+          { title: "К нам явился он за кашей С ложкой, вилкой и ножом, Но его отучат наши Заниматься грабежом", author: "Кукрыниксы", file: "7.jpg" },
+          { title: "Хотел отведать каши Владетельный барон. Теперь на грядке нашей Пугает он ворон.", author: "Кукрыниксы", file: "8.jpg" },
+          { title: "Про украинский хлеб и немецкий ремень", author: "Кукрыниксы", file: "9.jpg" },
+          { title: "Завоеватели, связанные дружбой", author: "Кукрыниксы", file: "10.jpg" },
+          { title: "Арапские сказки немецкого верховного командования, или тысяча и одна ложь", author: "Кукрыниксы", file: "11.jpg" },
+          { title: "Не так страшен черт, как его малюют", author: "Кукрыниксы", file: "12.jpg" },
+          { title: "Фашистская псарня", author: "Кукрыниксы", file: "13.jpg" },
+          { title: "Людоед-вегетарианец, или две стороны одной медали", author: "Кукрыниксы", file: "14.jpg" },
+          { title: "На подступах в Ленинграду", author: "Кукрыниксы", file: "15.jpg" },
+          { title: "Юный фриц", author: "Кукрыниксы", file: "16.jpg", museum: "Музей Порфирия Никитича Крылова" },
+          { title: "Против молодца – сам овца", author: "Кукрыниксы", file: "117.jpg", museum: "Музей Порфирия Никитича Крылова" },
+          { title: "Два котла", author: "Кукрыниксы", file: "118.jpg", museum: "Музей Порфирия Никитича Крылова" },
+          { title: "Непрочные вещи – Немецкие клещи", author: "Кукрыниксы, В. П. Катаев", file: "119.jpg", museum: "Тульский военно-исторический музей" },
+        ],
+      },
+      {
+        year: 1942,
+        items: [
+          { title: "Терем-терюмок", author: "Кукрыниксы", file: "17.jpg" },
+          { title: "Дойная корова", author: "Кукрыниксы", file: "18.jpg" },
+          { title: "Дело преступной шайки", author: "Кукрыниксы", file: "19.jpg" },
+          { title: "Новая кукольная комедия в постановке театра Виши", author: "Кукрыниксы", file: "20.jpg" },
+          { title: "Речи бессвязные, взоры усталые", author: "Кукрыниксы", file: "21.jpg" },
+          { title: "Все врут календари", author: "Кукрыниксы", file: "22.jpg" },
+          { title: "Прошло всего несколько месяцев (ВЗИРАЯ НА ЛИЦА...)", author: "Кукрыниксы", file: "23.jpg" },
+          { title: "Гитлер и смерть: осмелюсь доложить - линия фронта выправлена", author: "Кукрыниксы", file: "24.jpg" },
+          { title: "Скорбная помощь", author: "Кукрыниксы", file: "25.jpg" },
+          { title: "Аттестат зверости", author: "Кукрыниксы", file: "26.jpg" },
+          { title: "Окно ТАСС №640: Превращение фрицев", author: "Кукрыниксы", file: "27.jpg" },
+          { title: "Под лаваленым сапогом", author: "Кукрыниксы", file: "28.jpg" },
+          { title: "Гитлериада (Окно ТАСС)", author: "Кукрыниксы", file: "29.jpg", museum: "Музей Порфирия Никитича Крылова" },
+          { title: "Крыловская мартышка о Геббельсе", author: "Кукрыниксы", file: "30.jpg", museum: "Музей Порфирия Никитича Крылова" },
+        ],
+      },
+      {
+        year: 1943,
+        items: [
+          { title: "Расплата (Окно ТАСС)", author: "Кукрыниксы", file: "31.jpg", museum: "Музей Порфирия Никитича Крылова" },
+          { title: "За страну советскую, за веру немецкую (Окно ТАСС)", author: "Кукрыниксы", file: "32.jpg", museum: "Музей Порфирия Никитича Крылова" },
+          { title: "Убей его! (Окно ТАСС)", author: "Кукрыниксы", file: "33.jpg", museum: "Музей Порфирия Никитича Крылова" },
+          { title: "История с географией", author: "Кукрыниксы", file: "35.jpg" },
+          { title: "Потеряла я колечко... (а в колечке 22 дивизии)", author: "Кукрыниксы", file: "36.jpg" },
+          { title: "Фашистские генералы", author: "Кукрыниксы", file: "37.jpg" },
+          { title: "Курская аномалия", author: "Кукрыниксы", file: "38.jpg" },
+          { title: "Дона излучина крепко закручена", author: "Кукрыниксы", file: "39.jpg" },
+          { title: "Новогодное гадание", author: "Кукрыниксы", file: "40.jpg" },
+        ],
+      },
+      {
+        year: 1944,
+        items: [
+          { title: "Тотальная круговая порука", author: "Кукрыниксы", file: "41.jpg" },
+          { title: "Руки коротки", author: "Кукрыниксы", file: "42.jpg" },
+          { title: "Все линии прерваны", author: "Кукрыниксы", file: "44.jpg" },
+          { title: "Последний номер программы", author: "Кукрыниксы", file: "45.jpg" },
+          { title: "Красная армия шельму метит. Годовой итог.", author: "Кукрыниксы", file: "46.jpg" },
+          { title: "Три года войны (Окно ТАСС)", author: "Кукрыниксы", file: "47.jpg", museum: "Музей Порфирия Никитича Крылова" },
+          { title: "Пиковое положение", author: "Кукрыниксы", file: "48.jpg" },
+          { title: "Урок немцам", author: "Кукрыниксы", file: "49.jpg" },
+          { title: "Под ударами Красной Армии трещит и разваливается блок фашистских государств. Под ударами Красной Армии трещит и разваливается блок фашистских государств. Страх и смятение царят ныне среди румынских, венгерских, финских и болгарских \"союзников\" Гитлера. - Из Приказа Верховного Главнокомандующего тов. И.В.Сталина 1 мая 1944 года.", author: "Кукрыниксы", file: "50.jpg" },
+        ],
+      },
+      {
+        year: 1945,
+        items: [
+          { title: "Новинка фашистской техники", author: "Кукрыниксы", file: "51.jpg" },
+          { title: "Я приветствую стойкий гарнизон", author: "Кукрыниксы", file: "52.jpg" },
+          { title: "Эластичный краковя", author: "Кукрыниксы", file: "53.jpg" },
+          { title: "Удар в сердце.", author: "Кукрыниксы", file: "54.jpg" },
+          { title: "Конец игры", author: "Кукрыниксы", file: "55.jpg" },
+          { title: "Весна 1945 года", author: "Кукрыниксы", file: "56.jpg" },
+          { title: "Поверженный Берлин 1945", author: "Кукрыниксы", file: "57.jpg" },
+          { title: "Карта шита-крыта, но будет бита все равно.", author: "Кукрыниксы", file: "58.jpg" },
+          { title: "Трюк с бомбой этим циркачам, как видно, снится по ночам.", author: "Кукрыниксы", file: "59.jpg" },
+        ],
+      },
+    ];
+
+    window.NLRS_FILES = [];
+  </script>
+
+  <script>
+    // ------------------------------------------------------------------
+    // ЛОГИКА ОТОБРАЖЕНИЯ (полностью рабочая)
+    // ------------------------------------------------------------------
+    (function() {
+      const BASE = "./assets/posters_by_year/";
+      const BASE_SMALL = "./assets/posters_by_year_small/";
+
+      const yearSelect = document.getElementById("yearSelect");
+      const qEl = document.getElementById("q");
+      const resetBtn = document.getElementById("resetBtn");
+      const addPosterBtn = document.getElementById("addPosterBtn");
+      const gridEl = document.getElementById("grid");
+      const counterEl = document.getElementById("counter");
+      const showMoreBtn = document.getElementById("showMoreBtn");
+      const tulaFilter = document.getElementById("tula-museum-filter");
+
+      const LS_USER_KEY = "userPosters_v1";
+      const PAGE_SIZE = 24;
+      let visibleLimit = PAGE_SIZE;
+
+      function loadUserPosters() {
+        try {
+          const raw = localStorage.getItem(LS_USER_KEY);
+          if (!raw) return [];
+          const parsed = JSON.parse(raw);
+          return Array.isArray(parsed) ? parsed : [];
+        } catch { return []; }
+      }
+      let USER_POSTERS = loadUserPosters();
+
+      function saveUserPosters(list) {
+        try { localStorage.setItem(LS_USER_KEY, JSON.stringify(list)); } catch {}
+      }
+
+      function flatten() {
+        const rows = [];
+        for (const block of window.EXHIBIT_DATA || []) {
+          for (const it of block.items || []) {
+            rows.push({
+              year: block.year,
+              title: it.title,
+              author: it.author || "",
+              file: it.file,
+              museum: it.museum,
+              user: false,
+            });
+          }
+        }
+        for (const it of USER_POSTERS || []) {
+          rows.push({
+            year: it.year,
+            title: it.title,
+            author: it.author || "",
+            file: it.file,
+            museum: it.museum,
+            user: true,
+          });
+        }
+        return rows;
+      }
+      let ALL = flatten();
+
+      function normalizeForSearch(s) {
+        return String(s ?? "").toLowerCase().replace(/ё/g, "е").replace(/[«»"']/g, "").replace(/\s+/g, " ").trim();
+      }
+
+      function matches(row, yearValue, q, tulaOnly) {
+        if (yearValue !== "all" && String(row.year) !== String(yearValue)) return false;
+        if (tulaOnly && !row.museum) return false;
+        if (!q) return true;
+        const qq = normalizeForSearch(q);
+        if (!qq) return true;
+        const hay = normalizeForSearch(`${row.title} ${row.author} ${row.year} ${row.museum || ""}`);
+        return hay.includes(qq);
+      }
+
+      function candidatesExisting(row) {
+        const explicit = String(row?.file ?? "").trim();
+        if (explicit) return [explicit];
+        return [];
+      }
+
+      function render() {
+        const yearValue = yearSelect?.value ?? "all";
+        const q = qEl?.value ?? "";
+        const tulaOnly = tulaFilter?.checked ?? false;
+
+        const filtered = ALL.filter(r => matches(r, yearValue, q, tulaOnly)).filter(r => candidatesExisting(r).length > 0);
+        const visible = filtered.slice(0, Math.max(0, visibleLimit));
+
+        let shown = 0;
+        if (counterEl) {
+          const yearLabel = yearValue === "all" ? "все годы" : `год ${yearValue}`;
+          const tulaLabel = tulaOnly ? " (только музеи Тулы)" : "";
+          counterEl.textContent = `Показано: ${Math.min(filtered.length, visible.length)} из ${filtered.length} (${yearLabel}${tulaLabel})`;
+        }
+
+        gridEl.innerHTML = "";
+        for (const row of visible) {
+          const candidates = candidatesExisting(row);
+          if (!candidates.length) continue;
+
+          const card = document.createElement("div");
+          card.className = "item";
+
+          const imgWrap = document.createElement("div");
+          imgWrap.className = "imgWrap";
+          const img = document.createElement("img");
+          img.alt = `«${row.title}» (${row.year})`;
+          img.loading = "lazy";
+
+          let tryIdx = 0;
+          let phase = 0; // 0 - малый, 1 - большой
+          const setSrc = () => {
+            const file = candidates[tryIdx];
+            img.src = (phase === 0 ? BASE_SMALL : BASE) + file;
+          };
+          setSrc();
+
+          img.onerror = () => {
+            if (phase === 0) {
+              phase = 1;
+              setSrc();
+              return;
+            }
+            phase = 0;
+            tryIdx += 1;
+            if (tryIdx < candidates.length) {
+              setSrc();
+              return;
+            }
+            card.remove();
+            shown--;
+            if (counterEl) {
+              const yearLabel = yearValue === "all" ? "все годы" : `год ${yearValue}`;
+              const tulaLabel = tulaOnly ? " (только музеи Тулы)" : "";
+              counterEl.textContent = `Показано: ${shown} из ${filtered.length} (${yearLabel}${tulaLabel})`;
+            }
+          };
+
+          imgWrap.appendChild(img);
+          card.appendChild(imgWrap);
+
+          const meta = document.createElement("div");
+          meta.className = "meta";
+          meta.appendChild(Object.assign(document.createElement("div"), { className: "title", textContent: `«${row.title}»` }));
+          meta.appendChild(Object.assign(document.createElement("div"), { className: "author", textContent: `${row.author} - ${row.year}` }));
+          if (row.museum) {
+            meta.appendChild(Object.assign(document.createElement("div"), { className: "museum", textContent: `Музей: ${row.museum}` }));
+          }
+          if (row.user) {
+            const actions = document.createElement("div");
+            actions.className = "row";
+            actions.style.marginTop = "10px";
+            const delBtn = document.createElement("button");
+            delBtn.type = "button";
+            delBtn.className = "btn btnGhost btnSmall btnDanger";
+            delBtn.textContent = "Удалить";
+            delBtn.addEventListener("click", () => {
+              USER_POSTERS = USER_POSTERS.filter(p =>
+                String(p.year) !== String(row.year) ||
+                normalizeForSearch(p.title) !== normalizeForSearch(row.title) ||
+                String(p.file) !== String(row.file)
+              );
+              saveUserPosters(USER_POSTERS);
+              ALL = flatten();
+              render();
+            });
+            actions.appendChild(delBtn);
+            meta.appendChild(actions);
+          }
+          card.appendChild(meta);
+          gridEl.appendChild(card);
+          shown++;
+        }
+
+        if (counterEl) {
+          const yearLabel = yearValue === "all" ? "все годы" : `год ${yearValue}`;
+          const tulaLabel = tulaOnly ? " (только музеи Тулы)" : "";
+          counterEl.textContent = `Показано: ${shown} из ${filtered.length} (${yearLabel}${tulaLabel})`;
+        }
+
+        if (showMoreBtn) {
+          const remaining = Math.max(0, filtered.length - Math.min(filtered.length, visibleLimit));
+          if (remaining <= 0) showMoreBtn.style.display = "none";
+          else {
+            showMoreBtn.style.display = "";
+            showMoreBtn.textContent = `Показать ещё (${Math.min(PAGE_SIZE, remaining)} из ${remaining})`;
+          }
+        }
+      }
+
+      function resetControls() {
+        if (yearSelect) yearSelect.value = "all";
+        if (qEl) qEl.value = "";
+        if (tulaFilter) tulaFilter.checked = false;
+        visibleLimit = PAGE_SIZE;
+        render();
+      }
+
+      function addPosterFlow() {
+        const y = prompt("Год (например 1941):", "1941");
+        if (y == null) return;
+        const year = Number(String(y).trim());
+        if (!Number.isFinite(year)) return;
+
+        const title = prompt("Название плаката (обязательно):", "");
+        if (title == null) return;
+        const t = String(title).trim();
+        if (!t) return;
+
+        const author = prompt("Автор (можно оставить пустым):", "");
+        const a = String(author).trim() || "-";
+
+        const file = prompt("Имя файла (например 60.jpg):", "");
+        if (file == null) return;
+        const f = String(file).trim();
+        if (!f) return;
+
+        const museum = prompt("Название музея (если есть):", "");
+
+        USER_POSTERS = [...USER_POSTERS, { year, title: t, author: a, file: f, museum: museum ? museum.trim() : undefined }];
+        saveUserPosters(USER_POSTERS);
+        ALL = flatten();
+        visibleLimit = Math.max(visibleLimit, PAGE_SIZE);
+        render();
+      }
+
+      function resetPaging() { visibleLimit = PAGE_SIZE; }
+
+      yearSelect?.addEventListener("change", () => { resetPaging(); render(); });
+      qEl?.addEventListener("input", () => { resetPaging(); render(); });
+      resetBtn?.addEventListener("click", resetControls);
+      addPosterBtn?.addEventListener("click", addPosterFlow);
+      tulaFilter?.addEventListener("change", () => { resetPaging(); render(); });
+      showMoreBtn?.addEventListener("click", () => { visibleLimit += PAGE_SIZE; render(); });
+
+      render();
+    })();
+  </script>
+</body>
+</html>
